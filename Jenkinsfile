@@ -1,23 +1,21 @@
 pipeline {
-    agent any // Chạy trên bất kỳ agent nào
+    agent any
+
+    parameters {
+        string(name: 'PERSON_NAME', defaultValue: 'Khách', description: 'Tên người cần chào?')
+        choice(name: 'GREETING_TYPE', choices: ['Thân mật', 'Trang trọng'], description: 'Kiểu chào?')
+    }
 
     stages {
-        stage('Checkout Code') {
+        stage('Personalized Greeting') {
             steps {
-                // Tự động lấy mã nguồn từ kho chứa Git mà job này được cấu hình
-                checkout scm
-                echo 'Đã lấy mã nguồn thành công!'
-            }
-        }
-        stage('Build') {
-            steps {
-                echo 'Bắt đầu quá trình build...'
-                sh 'ls -la' // Liệt kê các file trong thư mục làm việc để xem code đã được lấy về chưa
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Giả lập việc chạy test...'
+                script { // Cần khối 'script' để dùng if/else
+                    if (params.GREETING_TYPE == 'Thân mật') {
+                        echo "Yo, ${params.PERSON_NAME}!"
+                    } else {
+                        echo "Xin kính chào quý ngài ${params.PERSON_NAME}."
+                    }
+                }
             }
         }
     }
