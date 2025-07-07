@@ -1,20 +1,18 @@
+@Library('my-global-library') _
+
 pipeline {
     agent any
 
-    parameters {
-        string(name: 'PERSON_NAME', defaultValue: 'Khách', description: 'Tên người cần chào?')
-        choice(name: 'GREETING_TYPE', choices: ['Thân mật', 'Trang trọng'], description: 'Kiểu chào?')
-    }
-
     stages {
-        stage('Personalized Greeting') {
+        stage('Test Shared Library') {
             steps {
-                script { // Cần khối 'script' để dùng if/else
-                    if (params.GREETING_TYPE == 'Thân mật') {
-                        echo "Yo, ${params.PERSON_NAME}!"
-                    } else {
-                        echo "Xin kính chào quý ngài ${params.PERSON_NAME}."
-                    }
+                script {
+                    // Bây giờ bạn có thể gọi các hàm trong file logUtils.groovy
+                    logUtils.info('Pipeline đã bắt đầu.')
+                    logUtils.warn('Đây là một cảnh báo thử nghiệm.')
+
+                    // Dòng dưới sẽ gây lỗi và dừng pipeline, bạn có thể thử bỏ comment để xem.
+                    // logUtils.error('Đây là một lỗi nghiêm trọng!')
                 }
             }
         }
